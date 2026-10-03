@@ -1,0 +1,2151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Childhood Ruined - AI Parody Studio</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Creepster & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Inter:wght@300;400;500;600;700;800&family=Permanent+Marker&family=Special+Elite&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            creepy: ['"Permanent Marker"', 'cursive'],
+            vintage: ['"Special Elite"', 'monospace'],
+            headline: ['Cinzel', 'serif']
+          },
+          colors: {
+            parody: {
+              yellow: '#FACC15',
+              dark: '#0D0F12',
+              card: '#161922',
+              border: '#282F3E',
+              crimson: '#E11D48',
+              accent: '#8B5CF6'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom scrollbars */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    /* Retro book cover styling */
+    .book-spine {
+      box-shadow: inset 18px 0 25px -10px rgba(0,0,0,0.7), inset -4px 0 10px rgba(0,0,0,0.5);
+    }
+    .paper-texture {
+      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.85; transform: scale(0.995); }
+    }
+    .subtle-pulse {
+      animation: pulse-subtle 3s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body class="bg-[#090B0E] text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-rose-500 selection:text-white paper-texture">
+
+  <header class="border-b border-slate-800 bg-[#0d1017]/90 backdrop-blur sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-amber-500 to-purple-600 flex items-center justify-center shadow-lg shadow-rose-900/30">
+          <i data-lucide="skull" class="w-6 h-6 text-white"></i>
+        </div>
+        <div>
+          <h1 class="font-creepy text-xl sm:text-2xl text-rose-500 tracking-wide flex items-center gap-2">
+            YOUR CHILDHOOD RUINED
+            <span class="text-xs px-2 py-0.5 rounded-full bg-rose-950/80 text-rose-400 border border-rose-800 font-sans font-semibold tracking-normal">AI v2.0</span>
+          </h1>
+          <p class="text-xs text-slate-400 hidden sm:block">Taking wholesome innocence and giving it cold, hard existential parody.</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <button id="openApiModalBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 border border-slate-700 hover:border-slate-500 transition-all shadow-sm">
+          <i data-lucide="sliders" class="w-3.5 h-3.5 text-amber-400"></i>
+          <span id="apiKeyStatusLabel">Agent Dashboard</span>
+          <span id="activeModelBadge" class="bg-rose-950 text-rose-300 border border-rose-800 text-[10px] px-1.5 py-0.2 rounded font-mono">Flash 3.0</span>
+        </button>
+        <button id="toggleHistoryBtn" class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-lg bg-slate-800/90 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all">
+          <i data-lucide="archive" class="w-3.5 h-3.5 text-indigo-400"></i>
+          <span class="hidden sm:inline">Vault</span>
+          <span id="historyCountBadge" class="bg-indigo-600 text-white text-[10px] px-1.5 py-0.2 rounded-full font-mono">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
+    
+    <!-- Left Column: Controls & Prompt Generator (5 cols) -->
+    <div class="lg:col-span-5 flex flex-col gap-6">
+      
+      <!-- Generator Configuration Card -->
+      <div class="bg-[#12161f] border border-slate-800 rounded-2xl p-5 shadow-xl flex flex-col gap-5">
+        <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+          <div class="flex items-center gap-2">
+            <i data-lucide="flame" class="w-5 h-5 text-rose-500"></i>
+            <h2 class="font-bold text-slate-100 text-base">Select Your Victim</h2>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span id="activeAgentLabel" class="text-[11px] text-amber-400/90 font-mono bg-amber-950/40 border border-amber-800/50 px-2 py-0.5 rounded">Satirist Agent</span>
+            <button id="quickDashboardBtn" title="Tune Agent Persona & Engine" class="text-slate-400 hover:text-white transition">
+              <i data-lucide="settings" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Presets Row -->
+        <div>
+          <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 block">Quick Nostalgia Presets</label>
+          <div class="flex flex-wrap gap-1.5" id="presetsContainer">
+            <button type="button" class="preset-pill px-2.5 py-1 text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700/60 transition" data-name="Winnie the Pooh" data-orig="A cuddly bear and his woods friends enjoying hunny jars.">🐻 Winnie the Pooh</button>
+            <button type="button" class="preset-pill px-2.5 py-1 text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700/60 transition" data-name="Toy Story" data-orig="Secretly alive plastic toys loyal to a boy named Andy.">🤠 Toy Story</button>
+            <button type="button" class="preset-pill px-2.5 py-1 text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700/60 transition" data-name="Teletubbies" data-orig="Tubby-toast eating creatures guided by a baby sun.">📺 Teletubbies</button>
+            <button type="button" class="preset-pill px-2.5 py-1 text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700/60 transition" data-name="Barney & Friends" data-orig="A singing purple dinosaur teaching sharing and caring.">🦖 Barney</button>
+            <button type="button" class="preset-pill px-2.5 py-1 text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700/60 transition" data-name="Thomas the Tank Engine" data-orig="Friendly locomotives on the Island of Sodor overseen by the Fat Controller.">🚂 Thomas & Friends</button>
+            <button type="button" class="preset-pill px-2.5 py-1 text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700/60 transition" data-name="Pokémon" data-orig="Ten year old children capturing wild pocket monsters in spherical capsules.">⚡ Pokémon</button>
+            <button type="button" class="preset-pill px-2.5 py-1 text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700/60 transition" data-name="The Giving Tree" data-orig="A tree that gives parts of its body until it is just a stump for a boy to sit on.">🌳 The Giving Tree</button>
+            <button type="button" class="preset-pill px-2.5 py-1 text-xs bg-slate-800/80 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700/60 transition" data-name="Cinderella" data-orig="An impoverished girl gets a glass slipper and marries royalty.">👠 Cinderella</button>
+          </div>
+        </div>
+
+        <!-- Custom Target Input -->
+        <div>
+          <label for="targetInput" class="text-xs font-semibold text-slate-300 block mb-1.5">Childhood Cartoon / Book / Character</label>
+          <div class="relative">
+            <input type="text" id="targetInput" placeholder="e.g., Arthur, SpongeBob, Dora the Explorer, Curious George..." value="Winnie the Pooh" class="w-full bg-slate-900 border border-slate-700 focus:border-rose-500 focus:ring-1 focus:ring-rose-500 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 outline-none transition pr-10">
+            <button id="randomizeBtn" title="Random surprise victim" class="absolute right-2 top-2 p-1 text-slate-400 hover:text-amber-400 transition">
+              <i data-lucide="dice-5" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-xs font-semibold text-slate-300 block mb-1.5">Parody Angle (How to Ruin It)</label>
+          <div class="grid grid-cols-2 gap-2 text-xs" id="angleSelector">
+            <label class="angle-card cursor-pointer border border-rose-500/80 bg-rose-950/20 p-2.5 rounded-xl flex items-start gap-2.5 transition">
+              <input type="radio" name="ruinAngle" value="parody_book" checked class="mt-0.5 text-rose-500 focus:ring-0">
+              <div>
+                <div class="font-bold text-slate-200">Vintage Parody Book</div>
+                <div class="text-[11px] text-slate-400">Golden Book style satirical cover & ruined nursery rhyme</div>
+              </div>
+            </label>
+            <label class="angle-card cursor-pointer border border-slate-800 hover:border-slate-700 bg-slate-900/60 p-2.5 rounded-xl flex items-start gap-2.5 transition">
+              <input type="radio" name="ruinAngle" value="noir_investigation" class="mt-0.5 text-rose-500 focus:ring-0">
+              <div>
+                <div class="font-bold text-slate-200">Forensic Noir Case</div>
+                <div class="text-[11px] text-slate-400">Gritty cold-case detective exposing psychological truth</div>
+              </div>
+            </label>
+            <label class="angle-card cursor-pointer border border-slate-800 hover:border-slate-700 bg-slate-900/60 p-2.5 rounded-xl flex items-start gap-2.5 transition">
+              <input type="radio" name="ruinAngle" value="conspiracy_theory" class="mt-0.5 text-rose-500 focus:ring-0">
+              <div>
+                <div class="font-bold text-slate-200">Unhinged Conspiracy</div>
+                <div class="text-[11px] text-slate-400">Wild subterranean bunker, simulation or government experiment</div>
+              </div>
+            </label>
+            <label class="angle-card cursor-pointer border border-slate-800 hover:border-slate-700 bg-slate-900/60 p-2.5 rounded-xl flex items-start gap-2.5 transition">
+              <input type="radio" name="ruinAngle" value="corporate_dystopia" class="mt-0.5 text-rose-500 focus:ring-0">
+              <div>
+                <div class="font-bold text-slate-200">Corporate Late-Stage</div>
+                <div class="text-[11px] text-slate-400">Board meetings, unpaid internship, OSHA violations & metrics</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Ruin Intensity Slider -->
+        <div>
+          <div class="flex items-center justify-between text-xs mb-1">
+            <span class="font-semibold text-slate-300">Ruin Cynicism Level:</span>
+            <span id="intensityLabel" class="text-rose-400 font-mono font-semibold">Stage 4: Existential Crisis</span>
+          </div>
+          <input type="range" id="intensitySlider" min="1" max="5" value="4" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-rose-500">
+          <div class="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
+            <span>Playful Satire</span>
+            <span>Uncomfortable Truth</span>
+            <span>Total Dread</span>
+          </div>
+        </div>
+
+        <!-- Extra notes / user twists -->
+        <div>
+          <label for="extraNotes" class="text-xs font-semibold text-slate-400 block mb-1">Optional Specific Twist or Joke Target</label>
+          <input type="text" id="extraNotes" placeholder="e.g., focus on Piglet's clinical anxiety, or Andy selling them on eBay" class="w-full bg-slate-900 border border-slate-700 focus:border-rose-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 outline-none">
+        </div>
+
+        <button id="generateBtn" class="w-full py-3.5 px-4 rounded-xl font-bold text-white bg-gradient-to-r from-rose-600 via-rose-500 to-amber-600 hover:from-rose-500 hover:to-amber-500 shadow-lg shadow-rose-950/40 hover:shadow-rose-900/60 transition-all flex items-center justify-center gap-2 transform active:scale-[0.99]">
+          <i data-lucide="zap" class="w-5 h-5"></i>
+          <span>RUIN THIS CHILDHOOD MEMORY</span>
+        </button>
+
+        <div id="statusAlert" class="hidden text-xs px-3.5 py-2.5 rounded-xl border"></div>
+      </div>
+
+      <!-- Quick Info / Why Agent Error Happened Card -->
+      <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-4 text-xs text-slate-400 space-y-2">
+        <div class="flex items-center gap-2 text-amber-400 font-semibold">
+          <i data-lucide="info" class="w-4 h-4"></i>
+          <span>Fix for "Agent Does Not Exist" Error</span>
+        </div>
+        <p class="leading-relaxed">
+          The original repository referenced a Vertex AI Reasoning Engine or Dialogflow agent ID instead of the standard Google AI Studio Gemini API endpoint. This rebuild connects cleanly to <code class="text-slate-200 bg-slate-800 px-1 py-0.5 rounded">gemini-3-flash-preview</code> using direct REST requests with built-in retry backoff.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="lg:col-span-7 flex flex-col gap-6">
+
+      <!-- Output Display Container -->
+      <div id="outputCard" class="bg-[#12161f] border border-slate-800 rounded-2xl overflow-hidden shadow-2xl transition-all min-h-[550px] flex flex-col">
+        
+        <!-- Result Header / Bar -->
+        <div class="bg-[#0b0e14] px-5 py-3.5 border-b border-slate-800 flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-rose-500 animate-pulse"></span>
+            <span class="font-bold text-sm tracking-wide uppercase text-slate-300" id="cardCategoryTitle">A Vintage Parody Ruin</span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap" id="actionButtonsRow">
+            <button id="copyStoryBtn" title="Copy Text" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1 transition">
+              <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+              <span>Copy</span>
+            </button>
+            <button id="exportImageBtn" title="Render as Shareable Card" class="px-2.5 py-1 text-xs rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 flex items-center gap-1 transition">
+              <i data-lucide="image" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span>Save Card</span>
+            </button>
+            <!-- Gemini Studio TTS Voice Dropdown & Trigger -->
+            <div class="flex items-center bg-slate-800 border border-slate-700 rounded-lg overflow-hidden">
+              <select id="geminiVoiceSelect" class="bg-transparent text-[11px] text-slate-300 px-2 py-1 outline-none border-r border-slate-700 cursor-pointer">
+                <option value="Algenib">Algenib (Gravelly Noir)</option>
+                <option value="Puck">Puck (Unhinged Upbeat)</option>
+                <option value="Charon">Charon (Forensic Informative)</option>
+                <option value="Kore">Kore (Stern Doctor)</option>
+                <option value="Zephyr">Zephyr (Eerie & Bright)</option>
+              </select>
+              <button id="speakStoryBtn" title="Generate Gemini Studio Voice Audio" class="px-2.5 py-1 text-xs text-amber-400 hover:text-amber-300 hover:bg-slate-700 flex items-center gap-1 transition">
+                <i data-lucide="radio" class="w-3.5 h-3.5 animate-pulse"></i>
+                <span id="speakLabel">Studio Voice</span>
+              </button>
+            </div>
+            <audio id="ttsAudioPlayer" class="hidden"></audio>
+          </div>
+        </div>
+
+        <!-- Result Body -->
+        <div class="p-6 flex-1 flex flex-col justify-center" id="outputContentArea">
+          
+          <!-- Default Empty / Ready State -->
+          <div id="emptyState" class="text-center py-14 px-4 flex flex-col items-center">
+            <div class="w-20 h-20 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-center mb-4 text-slate-600 shadow-inner">
+              <i data-lucide="book-x" class="w-10 h-10 text-rose-500/70"></i>
+            </div>
+            <h3 class="text-lg font-bold text-slate-200 mb-1">No Memories Annihilated Yet</h3>
+            <p class="text-sm text-slate-400 max-w-md mx-auto mb-6">
+              Pick a beloved classic on the left or type any show from your youth. Click "Ruin This Childhood Memory" to generate dark comedic satire.
+            </p>
+            <button id="quickTryBtn" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-xl text-xs font-semibold text-rose-400 flex items-center gap-2 transition">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Generate Sample: Winnie the Pooh's Hundred Acre Sanatorium</span>
+            </button>
+          </div>
+
+          <!-- Loading Spinner -->
+          <div id="loadingState" class="hidden py-16 text-center flex-col items-center justify-center">
+            <div class="relative w-16 h-16 mb-4">
+              <div class="w-16 h-16 rounded-full border-4 border-slate-800 border-t-rose-500 animate-spin"></div>
+              <div class="absolute inset-0 flex items-center justify-center text-xs font-creepy text-rose-400">YCR</div>
+            </div>
+            <h4 class="font-bold text-slate-200 text-base mb-1" id="loadingHeadline">Deconstructing innocent nostalgia...</h4>
+            <p class="text-xs text-slate-400 max-w-sm" id="loadingSubtext">Consulting the dark lore and drafting the satirical book cover...</p>
+          </div>
+
+          <div id="resultState" class="hidden flex flex-col gap-6">
+            
+            <!-- Book Cover Mockup Preview -->
+            <div id="mockCoverContainer" class="relative bg-gradient-to-br from-amber-100 via-amber-50 to-orange-100 text-slate-900 rounded-xl p-6 sm:p-8 border-4 border-amber-300 shadow-2xl book-spine overflow-hidden">
+              
+              <!-- Vintage Badge -->
+              <div class="flex items-center justify-between border-b-2 border-amber-900/20 pb-3 mb-4">
+                <span class="font-vintage text-xs tracking-widest text-amber-900 font-bold uppercase" id="badgeSeriesText">★ A Little Trauma Classic Book ★</span>
+                <span class="text-xs font-mono bg-rose-600 text-white px-2 py-0.5 rounded font-bold uppercase tracking-wider" id="coverAgeRating">Ages 25+</span>
+              </div>
+
+              <!-- Main Title in bold retro font -->
+              <h2 id="ruinedTitle" class="font-headline text-2xl sm:text-3xl font-black text-rose-950 tracking-tight leading-tight mb-2">
+                WINNIE THE POOH AND THE UNTREATED CLINICAL DELUSIONS
+              </h2>
+              
+              <div class="font-creepy text-base text-rose-700 mb-4" id="ruinedSubtitle">
+                "Nobody in this forest is a real bear, Christopher."
+              </div>
+
+              <!-- Graphic / Illustration Parody Box with Gemini 3.1 Flash Image Generator -->
+              <div class="bg-amber-200/60 border-2 border-dashed border-amber-800/40 rounded-xl p-4 mb-5 flex flex-col gap-3">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                  <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold text-amber-950 uppercase font-vintage flex items-center gap-1.5">
+                      <i data-lucide="palette" class="w-4 h-4 text-rose-700"></i>
+                      Cover Illustration
+                    </span>
+                    <span id="artBadge" class="text-[10px] bg-amber-900/10 text-amber-900 font-mono px-1.5 py-0.5 rounded border border-amber-900/20">Stylized Glyph</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <select id="artStyleSelect" class="bg-amber-100/90 border border-amber-800/30 rounded px-2 py-0.5 text-[11px] text-amber-950 font-vintage outline-none">
+                      <option value="vintage 1960s Little Golden Book watercolor sketch with subtle psychological tension">Vintage 1960s Golden Book</option>
+                      <option value="gritty 1940s noir detective comic panel with heavy shadows and rain">1940s Noir Graphic Novel</option>
+                      <option value="eerie vintage 1980s VHS cartoon animation frame with washed out colors">1980s Retro Cartoon Frame</option>
+                    </select>
+                    <button id="generateArtBtn" class="px-2.5 py-1 bg-rose-700 hover:bg-rose-800 text-white rounded text-xs font-semibold flex items-center gap-1 transition shadow-sm">
+                      <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                      <span id="generateArtBtnText">Paint AI Cover</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Display area for Graphic icon or Gemini Generated Image -->
+                <div id="artDisplayContainer" class="flex flex-col sm:flex-row items-center gap-4 bg-white/40 p-3 rounded-lg border border-amber-800/20 min-h-[90px]">
+                  <div id="coverImageWrapper" class="shrink-0 flex items-center justify-center">
+                    <div class="w-20 h-20 rounded-xl bg-rose-700 text-white flex items-center justify-center font-creepy text-3xl shadow-md" id="cardGraphicIcon">
+                      ☠
+                    </div>
+                    <img id="generatedCoverImg" src="" alt="AI Corrupted Cover Artwork" class="hidden w-36 h-36 object-cover rounded-lg border-2 border-amber-900 shadow-md">
+                  </div>
+                  <div class="flex-1 text-xs text-amber-950/90 leading-relaxed font-vintage" id="ruinedCatchphrase">
+                    "Sometimes the smallest things take up the most room in your psychiatric evaluation."
+                  </div>
+                </div>
+              </div>
+
+              <!-- The Ruined Story Excerpt -->
+              <div class="bg-white/80 backdrop-blur-sm rounded-lg p-4 border border-amber-900/10 text-slate-800 text-sm leading-relaxed mb-4 font-sans" id="ruinedSynopsis">
+                Story blurb appears here...
+              </div>
+
+              <!-- Hard Truth Bullet Points -->
+              <div class="space-y-1.5 mb-4">
+                <div class="text-xs font-bold text-amber-950 uppercase tracking-wider font-vintage">Forensic Realities You Can't Unsee:</div>
+                <ul class="text-xs text-slate-800 list-disc list-inside space-y-1" id="ruinedBullets">
+                  <li>Point 1</li>
+                </ul>
+              </div>
+
+              <!-- Back cover quote -->
+              <div class="border-t border-amber-900/20 pt-3 flex items-center justify-between text-[11px] text-amber-900/80 font-vintage">
+                <span id="authorNote">Parody Authorized by DubLadd AI Studio</span>
+                <span class="font-mono font-bold tracking-widest">ISBN 978-0-RUINED-666</span>
+              </div>
+
+            </div>
+
+            <!-- Plot Twist Deep Dive / Alternate Analysis -->
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-4 text-xs">
+              <div class="flex items-center gap-2 text-rose-400 font-bold mb-2">
+                <i data-lucide="bomb" class="w-4 h-4"></i>
+                <span class="uppercase tracking-wider">The Forbidden Plot Twist:</span>
+              </div>
+              <p id="deepTwistText" class="text-slate-300 leading-relaxed font-sans">
+                Additional lore twist will be generated here.
+              </p>
+            </div>
+
+            <!-- Suspect Interrogation Room (Gemini 3 Flash LLM Chat) -->
+            <div class="bg-[#0e121a] border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+              <div class="bg-slate-900/90 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></div>
+                  <h3 id="interrogationRoomTitle" class="font-bold text-xs text-slate-200 uppercase tracking-wider">Interrogation Room: Deposition</h3>
+                </div>
+              </div>
+              <div class="p-4 flex flex-col gap-3">
+                <div id="interrogationLog" class="flex-1 bg-slate-950 rounded-xl p-3 h-48 overflow-y-auto border border-slate-800 flex flex-col gap-2 font-mono text-[11px] leading-relaxed">
+                  <div class="text-slate-500 text-center italic py-4">Generate a memory first to begin interrogation.</div>
+                </div>
+                <form id="interrogationForm" class="flex gap-2">
+                  <input type="text" id="interrogationInput" placeholder="Interrogate the suspect (e.g. 'Why did you really do it?')..." class="flex-1 bg-slate-900 border border-slate-700 focus:border-amber-500 rounded-xl px-3 py-2 text-xs text-white placeholder-slate-500 outline-none">
+                  <button type="submit" id="interrogateSubmitBtn" class="px-3 py-2 bg-amber-700 hover:bg-amber-600 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                    <i data-lucide="message-square" class="w-3.5 h-3.5"></i>
+                    <span class="hidden sm:inline">Press</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- Leaked PR Statement (New LLM Feature) -->
+            <div class="bg-[#1a1515] border border-rose-900/30 rounded-2xl overflow-hidden shadow-xl">
+                <div class="bg-rose-950/40 px-4 py-3 border-b border-rose-900/30 flex items-center justify-between flex-wrap gap-2">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="mail-warning" class="w-4 h-4 text-rose-500"></i>
+                    <h3 class="font-bold text-xs text-rose-200 uppercase tracking-wider">Leaked Studio PR Apology</h3>
+                  </div>
+                  <button id="generatePrBtn" class="px-3 py-1.5 bg-rose-900 hover:bg-rose-800 text-rose-100 text-[11px] font-bold rounded-lg flex items-center gap-1.5 transition border border-rose-800 shadow-sm">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    <span>Generate LLM Apology</span>
+                  </button>
+                </div>
+                <div class="p-4 hidden" id="prContentArea">
+                  <div id="prLoading" class="hidden text-rose-400 text-xs italic flex items-center justify-center gap-2 py-4">
+                    <span class="w-3 h-3 rounded-full bg-rose-500 animate-ping"></span> Drafting corporate legal defense with Gemini AI...
+                  </div>
+                  <div id="prText" class="text-xs text-rose-100/90 font-serif leading-relaxed whitespace-pre-wrap bg-rose-950/20 p-4 rounded-xl border border-rose-900/30">
+                    <!-- LLM output goes here -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cursed Merchandise Pitch (New LLM Feature) -->
+              <div class="bg-[#151a15] border border-emerald-900/30 rounded-2xl overflow-hidden shadow-xl">
+                <div class="bg-emerald-950/40 px-4 py-3 border-b border-emerald-900/30 flex items-center justify-between flex-wrap gap-2">
+                  <div class="flex items-center gap-2">
+                    <i data-lucide="package-x" class="w-4 h-4 text-emerald-500"></i>
+                    <h3 class="font-bold text-xs text-emerald-200 uppercase tracking-wider">Unsafe Merch Pitch</h3>
+                  </div>
+                  <button id="generateMerchBtn" class="px-3 py-1.5 bg-emerald-900 hover:bg-emerald-800 text-emerald-100 text-[11px] font-bold rounded-lg flex items-center gap-1.5 transition border border-emerald-800 shadow-sm">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                    <span>Design Cursed Toy</span>
+                  </button>
+                </div>
+                <div class="p-4 hidden" id="merchContentArea">
+                  <div id="merchLoading" class="hidden text-emerald-400 text-xs italic flex items-center justify-center gap-2 py-4">
+                    <span class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span> Consulting unethical product engineers with Gemini AI...
+                  </div>
+                  <div id="merchText" class="text-xs text-emerald-100/90 font-sans leading-relaxed whitespace-pre-wrap bg-emerald-950/20 p-4 rounded-xl border border-emerald-900/30">
+                    <!-- LLM output goes here -->
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Comprehensive Agent Studio & API Dashboard Modal -->
+  <div id="apiModal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#10141d] border border-slate-700/80 rounded-2xl max-w-2xl w-full p-6 shadow-2xl relative max-h-[90vh] flex flex-col overflow-hidden">
+      <button id="closeApiModalBtn" class="absolute right-4 top-4 text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Dashboard Title -->
+      <div class="flex items-center gap-3 mb-5 pb-4 border-b border-slate-800">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 to-amber-500 text-white flex items-center justify-center shadow-lg">
+          <i data-lucide="bot" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="font-bold text-white text-base flex items-center gap-2">
+            AI Agent & Engine Studio
+            <span class="text-[10px] font-mono bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full border border-slate-700">Deep Config</span>
+          </h3>
+          <p class="text-xs text-slate-400">Tune the underlying brain, agent persona, creativity temperature, and lore depth.</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex gap-2 border-b border-slate-800/80 pb-3 mb-4 text-xs font-semibold">
+        <button id="tabModelBtn" class="px-3 py-1.5 rounded-lg bg-rose-950/60 text-rose-300 border border-rose-800/70 tab-btn flex items-center gap-1.5 transition" data-tab="tabModel">
+          <i data-lucide="cpu" class="w-3.5 h-3.5"></i>
+          <span>Model & Brain</span>
+        </button>
+        <button id="tabPersonaBtn" class="px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 tab-btn flex items-center gap-1.5 transition" data-tab="tabPersona">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Agent Persona</span>
+        </button>
+        <button id="tabTuningBtn" class="px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 tab-btn flex items-center gap-1.5 transition" data-tab="tabTuning">
+          <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5"></i>
+          <span>Fine-Tuning & Search</span>
+        </button>
+        <button id="tabKeyBtn" class="px-3 py-1.5 rounded-lg bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200 tab-btn flex items-center gap-1.5 transition" data-tab="tabKey">
+          <i data-lucide="key" class="w-3.5 h-3.5"></i>
+          <span>API Key & Safe Fallback</span>
+        </button>
+      </div>
+
+      <!-- Scrollable Tab Content Container -->
+      <div class="flex-1 overflow-y-auto space-y-4 pr-1 text-xs text-slate-300">
+        
+        <!-- TAB 1: MODEL & BRAIN -->
+        <div id="tabModel" class="tab-panel space-y-4">
+          <div>
+            <label class="block font-semibold text-slate-200 mb-2">Gemini Generation Architecture</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="modelSelector">
+              <!-- Flash -->
+              <label class="cursor-pointer model-card border-2 border-rose-500/80 bg-rose-950/20 p-3.5 rounded-xl flex flex-col gap-1.5 transition relative">
+                <input type="radio" name="agentModel" value="gemini-3-flash-preview" checked class="hidden">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-white text-sm flex items-center gap-1.5">
+                    <i data-lucide="zap" class="w-4 h-4 text-amber-400"></i>
+                    Gemini 3 Flash
+                  </span>
+                  <span class="text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded font-mono font-bold">Recommended</span>
+                </div>
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                  Ultra-fast responses, punchy satirical wit, high request quotas. Best for rapid comedic covers and snappy punchlines.
+                </p>
+                <div class="text-[10px] text-emerald-400 font-mono mt-1">Latency: ~1.2s • Quotas: High</div>
+              </label>
+
+              <!-- Pro -->
+              <label class="cursor-pointer model-card border border-slate-800 bg-slate-900/60 p-3.5 rounded-xl flex flex-col gap-1.5 transition relative">
+                <input type="radio" name="agentModel" value="gemini-2.5-pro" class="hidden">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-white text-sm flex items-center gap-1.5">
+                    <i data-lucide="brain-circuit" class="w-4 h-4 text-indigo-400"></i>
+                    Gemini 2.5 Pro
+                  </span>
+                  <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded font-mono font-bold">Deep Lore</span>
+                </div>
+                <p class="text-[11px] text-slate-400 leading-relaxed">
+                  Deep existential analysis, intricate psychological subtext, and rich literary prose. Takes slightly longer to generate.
+                </p>
+                <div class="text-[10px] text-indigo-400 font-mono mt-1">Latency: ~3.5s • Quotas: Standard</div>
+              </label>
+            </div>
+          </div>
+
+          <div class="bg-slate-900/90 border border-slate-800 rounded-xl p-3.5 text-[11px] text-slate-400 space-y-1.5">
+            <span class="font-semibold text-slate-200 block mb-0.5">Which one should you pick?</span>
+            <p>• <strong>Flash:</strong> Keep selected if you want instant, biting jokes and fast iteration.</p>
+            <p>• <strong>Pro:</strong> Pick this when you want deeper existential dread, long forensic breakdowns, or elaborate multi-layered conspiracies.</p>
+          </div>
+        </div>
+
+        <!-- TAB 2: AGENT PERSONA -->
+        <div id="tabPersona" class="tab-panel hidden space-y-4">
+          <div>
+            <label class="block font-semibold text-slate-200 mb-2">Comedic Agent Persona Archetype</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" id="personaSelector">
+              <label class="cursor-pointer persona-card border border-rose-500/80 bg-rose-950/20 p-2.5 rounded-xl flex items-start gap-2.5 transition">
+                <input type="radio" name="agentPersona" value="satirist" checked class="mt-0.5 text-rose-500">
+                <div>
+                  <div class="font-bold text-white text-xs">Cynical Satirist</div>
+                  <div class="text-[11px] text-slate-400">Classic biting humor, dark irony, and subverted children's tropes.</div>
+                </div>
+              </label>
+
+              <label class="cursor-pointer persona-card border border-slate-800 bg-slate-900/60 p-2.5 rounded-xl flex items-start gap-2.5 transition">
+                <input type="radio" name="agentPersona" value="psychiatrist" class="mt-0.5 text-rose-500">
+                <div>
+                  <div class="font-bold text-white text-xs">Clinical Psychoanalyst</div>
+                  <div class="text-[11px] text-slate-400">DSM-5 diagnosis, severe untreated neuroses, and childhood trauma terms.</div>
+                </div>
+              </label>
+
+              <label class="cursor-pointer persona-card border border-slate-800 bg-slate-900/60 p-2.5 rounded-xl flex items-start gap-2.5 transition">
+                <input type="radio" name="agentPersona" value="gumshoe" class="mt-0.5 text-rose-500">
+                <div>
+                  <div class="font-bold text-white text-xs">Gritty Noir Gumshoe</div>
+                  <div class="text-[11px] text-slate-400">Hardboiled 1940s monologues, cigarette smoke, and cold open-and-shut cases.</div>
+                </div>
+              </label>
+
+              <label class="cursor-pointer persona-card border border-slate-800 bg-slate-900/60 p-2.5 rounded-xl flex items-start gap-2.5 transition">
+                <input type="radio" name="agentPersona" value="conspiracy_podcaster" class="mt-0.5 text-rose-500">
+                <div>
+                  <div class="font-bold text-white text-xs">Unhinged Truth Podcaster</div>
+                  <div class="text-[11px] text-slate-400">Late night red-string corkboards, government bunkers, and simulation glitches.</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label for="customPromptOverride" class="block font-semibold text-slate-200 mb-1">
+              Custom Agent Directive Override <span class="text-slate-500 font-normal">(Optional)</span>
+            </label>
+            <textarea id="customPromptOverride" rows="3" placeholder="e.g. Always write in the poetic style of Edgar Allan Poe with rhyming stanzas, or adopt the voice of a grumpy BBC nature documentary host..." class="w-full bg-slate-950 border border-slate-800 focus:border-rose-500 rounded-xl p-3 text-xs text-white placeholder-slate-600 outline-none"></textarea>
+            <p class="text-[10px] text-slate-400 mt-1">If filled, this extra directive is appended directly to Gemini's system instructions.</p>
+          </div>
+        </div>
+
+        <!-- TAB 3: FINE-TUNING & SEARCH -->
+        <div id="tabTuning" class="tab-panel hidden space-y-4">
+          <!-- Creativity / Temperature -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="font-semibold text-slate-200">Creativity / Chaos (Temperature):</label>
+              <span id="tempValueDisplay" class="font-mono text-amber-400 font-bold">0.85 (Sharp & Witty)</span>
+            </div>
+            <input type="range" id="tempSlider" min="0.2" max="1.2" step="0.05" value="0.85" class="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500">
+            <div class="flex justify-between text-[10px] text-slate-500 font-mono mt-1">
+              <span>0.2 - Dry & Literal</span>
+              <span>0.7 - Balanced Comedy</span>
+              <span>1.2 - Fever Dream</span>
+            </div>
+          </div>
+
+          <!-- Prose Depth Toggle -->
+          <div>
+            <label class="block font-semibold text-slate-200 mb-1.5">Lore Depth & Length</label>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <label class="depth-card cursor-pointer border border-rose-500/80 bg-rose-950/20 p-2.5 rounded-xl flex items-center gap-2">
+                <input type="radio" name="loreDepth" value="standard" checked class="text-rose-500">
+                <div>
+                  <div class="font-bold text-white text-xs">Standard Book Cover</div>
+                  <div class="text-[11px] text-slate-400">Punchy synopsis + 4 key bullet points</div>
+                </div>
+              </label>
+              <label class="depth-card cursor-pointer border border-slate-800 bg-slate-900/60 p-2.5 rounded-xl flex items-center gap-2">
+                <input type="radio" name="loreDepth" value="deep" class="text-rose-500">
+                <div>
+                  <div class="font-bold text-white text-xs">Deep Forensic Dossier</div>
+                  <div class="text-[11px] text-slate-400">Extended 4-paragraph dark deconstruction + 6 bullets</div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Google Search Grounding Checkbox -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 flex items-start gap-3">
+            <input type="checkbox" id="enableSearchToggle" class="mt-1 w-4 h-4 rounded border-slate-700 text-rose-600 focus:ring-0 cursor-pointer">
+            <div class="flex-1">
+              <label for="enableSearchToggle" class="font-bold text-slate-200 cursor-pointer flex items-center gap-2">
+                Enable Google Search Grounding
+                <span class="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.2 rounded border border-blue-500/30">Live Web Facts</span>
+              </label>
+              <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                Empowers Gemini to perform live Google searches for real-world franchise scandals, behind-the-scenes controversies, and bizarre creator trivia to ground the satirical ruin in shocking real facts.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB 4: API KEY & SAFE FALLBACK -->
+        <div id="tabKey" class="tab-panel hidden space-y-4">
+          <div>
+            <label for="apiKeyInput" class="block font-semibold text-slate-200 mb-1">Your Google Gemini API Key</label>
+            <input type="password" id="apiKeyInput" placeholder="AIzaSy..." class="w-full bg-slate-950 border border-slate-700 focus:border-amber-400 rounded-xl px-3.5 py-2.5 text-xs text-white font-mono outline-none">
+            <p class="text-[11px] text-slate-400 mt-1.5">
+              Leave blank if running in an automated environment with pre-injected credentials, or paste your API key from Google AI Studio.
+            </p>
+          </div>
+
+          <!-- Zero-Key Offline Sandbox Toggle -->
+          <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 flex items-start gap-3">
+            <input type="checkbox" id="offlineSandboxToggle" class="mt-1 w-4 h-4 rounded border-slate-700 text-amber-500 focus:ring-0 cursor-pointer">
+            <div class="flex-1">
+              <label for="offlineSandboxToggle" class="font-bold text-amber-300 cursor-pointer flex items-center gap-2">
+                Offline Satire Sandbox (Zero API Required)
+                <span class="text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.2 rounded">Instant Mocking</span>
+              </label>
+              <p class="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                When enabled, the app will instantly generate dynamic procedural satire locally without calling external network APIs. Perfect for quick testing and zero-quota limits.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 pt-1">
+            <button id="testApiBtn" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-xs font-semibold text-slate-200 flex items-center gap-1.5 transition">
+              <i data-lucide="activity" class="w-3.5 h-3.5 text-cyan-400"></i>
+              <span id="testApiBtnText">Test Connectivity</span>
+            </button>
+            <span id="testApiResult" class="text-[11px] font-mono"></span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-4 mt-3 border-t border-slate-800 flex justify-between items-center text-xs">
+        <button id="resetDefaultsBtn" class="text-slate-400 hover:text-slate-300 flex items-center gap-1 text-[11px]">
+          <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+          <span>Reset Defaults</span>
+        </button>
+        <div class="flex gap-2">
+          <button id="clearKeyBtn" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs transition">Clear Key</button>
+          <button id="saveKeyBtn" class="px-5 py-2 rounded-xl bg-gradient-to-r from-rose-600 to-amber-600 hover:from-rose-500 hover:to-amber-500 text-white font-bold text-xs shadow-lg transition">Apply & Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vault / History Drawer Modal -->
+  <div id="historyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#121620] border border-slate-700 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative max-h-[85vh] flex flex-col">
+      <button id="closeHistoryModalBtn" class="absolute right-4 top-4 text-slate-400 hover:text-white">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center gap-2 mb-4">
+        <i data-lucide="archive" class="w-5 h-5 text-indigo-400"></i>
+        <h3 class="font-bold text-white text-base">Archived Childhood Ruins</h3>
+      </div>
+
+      <div id="historyList" class="flex-1 overflow-y-auto space-y-2.5 pr-1">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
+        <button id="clearHistoryBtn" class="text-rose-400 hover:text-rose-300 flex items-center gap-1">
+          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+          <span>Clear Vault</span>
+        </button>
+        <span class="text-slate-500" id="vaultItemCount">0 saved items</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden canvas for rendering image export -->
+  <canvas id="exportCanvas" class="hidden"></canvas>
+
+  <script>
+    // App State with Advanced Agent Controls
+    const defaultSettings = {
+      apiKey: localStorage.getItem('ycr_gemini_api_key') || '',
+      model: localStorage.getItem('ycr_agent_model') || 'gemini-3-flash-preview',
+      agentPersona: localStorage.getItem('ycr_agent_persona') || 'satirist',
+      customPromptOverride: localStorage.getItem('ycr_agent_custom_prompt') || '',
+      temperature: parseFloat(localStorage.getItem('ycr_agent_temperature') || '0.85'),
+      loreDepth: localStorage.getItem('ycr_agent_depth') || 'standard',
+      enableSearch: localStorage.getItem('ycr_agent_search') === 'true',
+      offlineSandbox: localStorage.getItem('ycr_agent_offline') === 'true'
+    };
+
+    const state = {
+      ...defaultSettings,
+      history: JSON.parse(localStorage.getItem('ycr_history') || '[]'),
+      currentResult: null,
+      isSpeaking: false,
+      speechUtterance: null,
+      interrogationHistory: []
+    };
+
+    // Pre-made sample for quick showcase
+    const sampleRuinedPooh = {
+      target: "Winnie the Pooh",
+      angle: "parody_book",
+      title: "WINNIE THE POOH AND THE CLINICAL DELUSIONS OF THE WOODS",
+      subtitle: "Christopher Robin's Mind Shatters in Ward 100",
+      catchphrase: "A bear of very little brain... because the frontal lobe never fully matured.",
+      synopsis: "Join Winnie the Pooh as he attempts to satisfy an addiction to golden nectar that is clearly a metaphor for severe metabolic dependency. Meanwhile, Piglet continues to display symptoms of acute generalized anxiety disorder without ever receiving proper psychiatric medication, Eeyore remains in a 14-year depressive episode while losing essential body parts, and Tigger's hyperactive impulses continue unchecked by adult supervision.",
+      bullets: [
+        "Rabbit's obsessive-compulsive hoarding of root vegetables is a cry for boundary enforcement.",
+        "Owl possesses no accredited doctorate in avian medicine and is actively practicing malpractice.",
+        "The Heffalumps and Woozles were just untreated hallucinations brought on by dehydration.",
+        "Christopher Robin's parents are currently consulting specialists regarding why their son talks to stuffed lint."
+      ],
+      deepTwist: "In the final unreleased chapter, the 100 Acre Wood is foreclosed upon by the Sussex municipal government to construct a dual-carriageway bypass.",
+      timestamp: Date.now()
+    };
+
+    const elements = {
+      targetInput: document.getElementById('targetInput'),
+      randomizeBtn: document.getElementById('randomizeBtn'),
+      angleSelector: document.getElementById('angleSelector'),
+      intensitySlider: document.getElementById('intensitySlider'),
+      intensityLabel: document.getElementById('intensityLabel'),
+      extraNotes: document.getElementById('extraNotes'),
+      generateBtn: document.getElementById('generateBtn'),
+      presetsContainer: document.getElementById('presetsContainer'),
+      statusAlert: document.getElementById('statusAlert'),
+
+      // Output state elements
+      emptyState: document.getElementById('emptyState'),
+      loadingState: document.getElementById('loadingState'),
+      resultState: document.getElementById('resultState'),
+      loadingHeadline: document.getElementById('loadingHeadline'),
+      loadingSubtext: document.getElementById('loadingSubtext'),
+      quickTryBtn: document.getElementById('quickTryBtn'),
+
+      // Result elements
+      ruinedTitle: document.getElementById('ruinedTitle'),
+      ruinedSubtitle: document.getElementById('ruinedSubtitle'),
+      ruinedCatchphrase: document.getElementById('ruinedCatchphrase'),
+      ruinedSynopsis: document.getElementById('ruinedSynopsis'),
+      ruinedBullets: document.getElementById('ruinedBullets'),
+      deepTwistText: document.getElementById('deepTwistText'),
+      badgeSeriesText: document.getElementById('badgeSeriesText'),
+      cardGraphicIcon: document.getElementById('cardGraphicIcon'),
+
+      // Header & Status Badges
+      activeModelBadge: document.getElementById('activeModelBadge'),
+      activeAgentLabel: document.getElementById('activeAgentLabel'),
+      quickDashboardBtn: document.getElementById('quickDashboardBtn'),
+
+      // Buttons
+      copyStoryBtn: document.getElementById('copyStoryBtn'),
+      exportImageBtn: document.getElementById('exportImageBtn'),
+      speakStoryBtn: document.getElementById('speakStoryBtn'),
+      speakLabel: document.getElementById('speakLabel'),
+      geminiVoiceSelect: document.getElementById('geminiVoiceSelect'),
+      ttsAudioPlayer: document.getElementById('ttsAudioPlayer'),
+
+      // Cover Art Elements
+      generateArtBtn: document.getElementById('generateArtBtn'),
+      generateArtBtnText: document.getElementById('generateArtBtnText'),
+      artStyleSelect: document.getElementById('artStyleSelect'),
+      generatedCoverImg: document.getElementById('generatedCoverImg'),
+      artBadge: document.getElementById('artBadge'),
+
+      // Suspect Interrogation
+      interrogationRoomTitle: document.getElementById('interrogationRoomTitle'),
+      interrogationLog: document.getElementById('interrogationLog'),
+      interrogationForm: document.getElementById('interrogationForm'),
+      interrogationInput: document.getElementById('interrogationInput'),
+      interrogateSubmitBtn: document.getElementById('interrogateSubmitBtn'),
+
+      // PR Apology LLM Feature
+      generatePrBtn: document.getElementById('generatePrBtn'),
+      prContentArea: document.getElementById('prContentArea'),
+      prLoading: document.getElementById('prLoading'),
+      prText: document.getElementById('prText'),
+
+      // Cursed Merch LLM Feature
+      generateMerchBtn: document.getElementById('generateMerchBtn'),
+      merchContentArea: document.getElementById('merchContentArea'),
+      merchLoading: document.getElementById('merchLoading'),
+      merchText: document.getElementById('merchText'),
+
+      // Dashboard Modal Elements
+      openApiModalBtn: document.getElementById('openApiModalBtn'),
+      closeApiModalBtn: document.getElementById('closeApiModalBtn'),
+      apiModal: document.getElementById('apiModal'),
+      apiKeyInput: document.getElementById('apiKeyInput'),
+      saveKeyBtn: document.getElementById('saveKeyBtn'),
+      clearKeyBtn: document.getElementById('clearKeyBtn'),
+      resetDefaultsBtn: document.getElementById('resetDefaultsBtn'),
+      apiKeyStatusLabel: document.getElementById('apiKeyStatusLabel'),
+      tempSlider: document.getElementById('tempSlider'),
+      tempValueDisplay: document.getElementById('tempValueDisplay'),
+      customPromptOverride: document.getElementById('customPromptOverride'),
+      enableSearchToggle: document.getElementById('enableSearchToggle'),
+      offlineSandboxToggle: document.getElementById('offlineSandboxToggle'),
+      testApiBtn: document.getElementById('testApiBtn'),
+      testApiBtnText: document.getElementById('testApiBtnText'),
+      testApiResult: document.getElementById('testApiResult'),
+
+      // Vault History
+      toggleHistoryBtn: document.getElementById('toggleHistoryBtn'),
+      closeHistoryModalBtn: document.getElementById('closeHistoryModalBtn'),
+      historyModal: document.getElementById('historyModal'),
+      historyList: document.getElementById('historyList'),
+      historyCountBadge: document.getElementById('historyCountBadge'),
+      clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+      vaultItemCount: document.getElementById('vaultItemCount')
+    };
+
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Dashboard Tab Switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => {
+          b.classList.remove('bg-rose-950/60', 'text-rose-300', 'border-rose-800/70');
+          b.classList.add('bg-slate-900', 'text-slate-400', 'border-slate-800');
+        });
+        btn.classList.add('bg-rose-950/60', 'text-rose-300', 'border-rose-800/70');
+        btn.classList.remove('bg-slate-900', 'text-slate-400', 'border-slate-800');
+
+        const targetTabId = btn.getAttribute('data-tab');
+        document.querySelectorAll('.tab-panel').forEach(panel => {
+          panel.classList.toggle('hidden', panel.id !== targetTabId);
+        });
+      });
+    });
+
+    // Model selection radio styling
+    document.querySelectorAll('input[name="agentModel"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.model-card').forEach(card => {
+          card.classList.remove('border-2', 'border-rose-500/80', 'bg-rose-950/20');
+          card.classList.add('border', 'border-slate-800', 'bg-slate-900/60');
+        });
+        const activeCard = radio.closest('.model-card');
+        activeCard.classList.remove('border', 'border-slate-800', 'bg-slate-900/60');
+        activeCard.classList.add('border-2', 'border-rose-500/80', 'bg-rose-950/20');
+      });
+    });
+
+    // Persona radio styling
+    document.querySelectorAll('input[name="agentPersona"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.persona-card').forEach(card => {
+          card.classList.remove('border-rose-500/80', 'bg-rose-950/20');
+          card.classList.add('border-slate-800', 'bg-slate-900/60');
+        });
+        const activeCard = radio.closest('.persona-card');
+        activeCard.classList.remove('border-slate-800', 'bg-slate-900/60');
+        activeCard.classList.add('border-rose-500/80', 'bg-rose-950/20');
+      });
+    });
+
+    // Depth radio styling
+    document.querySelectorAll('input[name="loreDepth"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.depth-card').forEach(card => {
+          card.classList.remove('border-rose-500/80', 'bg-rose-950/20');
+          card.classList.add('border-slate-800', 'bg-slate-900/60');
+        });
+        const activeCard = radio.closest('.depth-card');
+        activeCard.classList.remove('border-slate-800', 'bg-slate-900/60');
+        activeCard.classList.add('border-rose-500/80', 'bg-rose-950/20');
+      });
+    });
+
+    // Temperature slider display
+    elements.tempSlider.addEventListener('input', (e) => {
+      const val = parseFloat(e.target.value);
+      let label = "Balanced Comedy";
+      if (val < 0.4) label = "Dry & Clinical";
+      else if (val < 0.7) label = "Structured Irony";
+      else if (val < 0.95) label = "Sharp & Witty";
+      else label = "Unhinged Fever Dream";
+      elements.tempValueDisplay.textContent = `${val.toFixed(2)} (${label})`;
+    });
+
+    function updateDashboardBadges() {
+      // Model badge
+      if (state.offlineSandbox) {
+        elements.activeModelBadge.textContent = "Offline Mock";
+        elements.activeModelBadge.className = "bg-amber-950 text-amber-300 border border-amber-800 text-[10px] px-1.5 py-0.2 rounded font-mono";
+      } else if (state.model === 'gemini-2.5-pro') {
+        elements.activeModelBadge.textContent = "Pro 2.5";
+        elements.activeModelBadge.className = "bg-indigo-950 text-indigo-300 border border-indigo-800 text-[10px] px-1.5 py-0.2 rounded font-mono";
+      } else {
+        elements.activeModelBadge.textContent = "Flash 3.0";
+        elements.activeModelBadge.className = "bg-rose-950 text-rose-300 border border-rose-800 text-[10px] px-1.5 py-0.2 rounded font-mono";
+      }
+
+      // Persona label
+      const personaNames = {
+        satirist: "Satirist Agent",
+        psychiatrist: "Freudian Coroner",
+        gumshoe: "Noir Gumshoe",
+        conspiracy_podcaster: "Truth Podcaster"
+      };
+      elements.activeAgentLabel.textContent = personaNames[state.agentPersona] || "Custom Agent";
+
+      if (state.apiKey && state.apiKey.trim().length > 5) {
+        elements.apiKeyStatusLabel.textContent = "Custom Key Active";
+        elements.apiKeyStatusLabel.classList.add("text-emerald-400");
+      } else {
+        elements.apiKeyStatusLabel.textContent = "Agent Studio";
+        elements.apiKeyStatusLabel.classList.remove("text-emerald-400");
+      }
+    }
+    updateDashboardBadges();
+
+    function syncSettingsToForm() {
+      elements.apiKeyInput.value = state.apiKey;
+      elements.tempSlider.value = state.temperature;
+      elements.tempSlider.dispatchEvent(new Event('input'));
+      elements.customPromptOverride.value = state.customPromptOverride;
+      elements.enableSearchToggle.checked = state.enableSearch;
+      elements.offlineSandboxToggle.checked = state.offlineSandbox;
+
+      const modelRadio = document.querySelector(`input[name="agentModel"][value="${state.model}"]`);
+      if (modelRadio) {
+        modelRadio.checked = true;
+        modelRadio.dispatchEvent(new Event('change'));
+      }
+
+      const personaRadio = document.querySelector(`input[name="agentPersona"][value="${state.agentPersona}"]`);
+      if (personaRadio) {
+        personaRadio.checked = true;
+        personaRadio.dispatchEvent(new Event('change'));
+      }
+
+      const depthRadio = document.querySelector(`input[name="loreDepth"][value="${state.loreDepth}"]`);
+      if (depthRadio) {
+        depthRadio.checked = true;
+        depthRadio.dispatchEvent(new Event('change'));
+      }
+    }
+    syncSettingsToForm();
+
+    const randomVictims = [
+      "Curious George", "Arthur the Aardvark", "Dora the Explorer", "Bob the Builder",
+      "Caillou", "The Magic School Bus", "Peppa Pig", "The Cat in the Hat",
+      "Clifford the Big Red Dog", "Blue's Clues", "Paddington Bear", "Paw Patrol",
+      "Peter Pan", "Snow White", "Rugrats", "Where's Waldo"
+    ];
+
+    function updateApiKeyBadge() {
+      if (state.apiKey && state.apiKey.trim().length > 5) {
+        elements.apiKeyStatusLabel.textContent = "Custom Key Active";
+        elements.apiKeyStatusLabel.classList.add("text-emerald-400");
+      } else {
+        elements.apiKeyStatusLabel.textContent = "Default API";
+        elements.apiKeyStatusLabel.classList.remove("text-emerald-400");
+      }
+    }
+    updateApiKeyBadge();
+
+    // Slider label updates
+    const intensityMap = {
+      1: "Stage 1: Mild Cheeky Parody",
+      2: "Stage 2: Cynical Plot Holes",
+      3: "Stage 3: Uncomfortable Realism",
+      4: "Stage 4: Existential Crisis",
+      5: "Stage 5: Complete Childhood Annihilation"
+    };
+
+    elements.intensitySlider.addEventListener('input', (e) => {
+      elements.intensityLabel.textContent = intensityMap[e.target.value] || "Maximum Dread";
+    });
+
+    // Randomize button
+    elements.randomizeBtn.addEventListener('click', () => {
+      const pick = randomVictims[Math.floor(Math.random() * randomVictims.length)];
+      elements.targetInput.value = pick;
+      flashInput(elements.targetInput);
+    });
+
+    // Preset pills
+    elements.presetsContainer.addEventListener('click', (e) => {
+      const pill = e.target.closest('.preset-pill');
+      if (!pill) return;
+      elements.targetInput.value = pill.getAttribute('data-name');
+      flashInput(elements.targetInput);
+    });
+
+    function flashInput(el) {
+      el.classList.add('ring-2', 'ring-rose-500');
+      setTimeout(() => el.classList.remove('ring-2', 'ring-rose-500'), 500);
+    }
+
+    // Radio card visual toggles
+    document.querySelectorAll('input[name="ruinAngle"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        document.querySelectorAll('.angle-card').forEach(card => {
+          card.classList.remove('border-rose-500/80', 'bg-rose-950/20');
+          card.classList.add('border-slate-800', 'bg-slate-900/60');
+        });
+        const currentCard = radio.closest('.angle-card');
+        currentCard.classList.remove('border-slate-800', 'bg-slate-900/60');
+        currentCard.classList.add('border-rose-500/80', 'bg-rose-950/20');
+      });
+    });
+
+    function showStatus(message, type = 'error') {
+      elements.statusAlert.classList.remove('hidden', 'bg-rose-950/80', 'border-rose-800', 'text-rose-300', 'bg-emerald-950/80', 'border-emerald-800', 'text-emerald-300');
+      if (type === 'error') {
+        elements.statusAlert.classList.add('bg-rose-950/80', 'border-rose-800', 'text-rose-300');
+      } else {
+        elements.statusAlert.classList.add('bg-emerald-950/80', 'border-emerald-800', 'text-emerald-300');
+      }
+      elements.statusAlert.textContent = message;
+    }
+
+    function clearStatus() {
+      elements.statusAlert.classList.add('hidden');
+    }
+
+    function getPersonaInstructions(persona) {
+      switch (persona) {
+        case 'psychiatrist':
+          return "Adopt the clinical persona of an exhausted Freudian psychoanalyst and psychiatric coroner. Frame every character's actions as textbook unmedicated personality disorders, childhood defense mechanisms, and severe delusions.";
+        case 'gumshoe':
+          return "Adopt the hardboiled persona of a cynical 1940s noir detective narrating a rainy investigation into the wholesome town's open secrets, kickbacks, and cold-case coverups.";
+        case 'conspiracy_podcaster':
+          return "Adopt the hyper-caffeinated persona of a 3 AM corkboard conspiracy theorist with red strings, seeing government black-budget psychological operations, simulation glitches, and MK-Ultra experiments behind every tree.";
+        case 'satirist':
+        default:
+          return "Adopt the witty, biting comedic persona of a dark parody satirist, taking beloved wholesome innocent franchises and giving them hilarious, razor-sharp existential realism.";
+      }
+    }
+
+    // Helper: Convert Base64 to ArrayBuffer for Gemini Audio
+    function base64ToArrayBuffer(base64) {
+      const binaryString = window.atob(base64);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+      return bytes.buffer;
+    }
+
+    // Helper: Convert raw signed PCM16 audio bytes to playable WAV blob
+    function pcmToWav(pcmData, sampleRate) {
+      const numChannels = 1;
+      const bytesPerSample = 2;
+      const blockAlign = numChannels * bytesPerSample;
+      const byteRate = sampleRate * blockAlign;
+      const dataSize = pcmData.length * bytesPerSample;
+      const buffer = new ArrayBuffer(44 + dataSize);
+      const view = new DataView(buffer);
+
+      function writeString(view, offset, string) {
+        for (let i = 0; i < string.length; i++) {
+          view.setUint8(offset + i, string.charCodeAt(i));
+        }
+      }
+      writeString(view, 0, 'RIFF');
+      view.setUint32(4, 36 + dataSize, true);
+      writeString(view, 8, 'WAVE');
+      writeString(view, 12, 'fmt ');
+      view.setUint32(16, 16, true);
+      view.setUint16(20, 1, true); // PCM format
+      view.setUint16(22, numChannels, true);
+      view.setUint32(24, sampleRate, true);
+      view.setUint32(28, byteRate, true);
+      view.setUint16(32, blockAlign, true);
+      view.setUint16(34, 16, true); // 16-bit
+      writeString(view, 36, 'data');
+      view.setUint32(40, dataSize, true);
+
+      for (let i = 0; i < pcmData.length; i++) {
+        view.setInt16(44 + i * 2, pcmData[i], true);
+      }
+      return new Blob([view], { type: 'audio/wav' });
+    }
+
+    // Procedural offline generator for Instant Sandbox mode
+    function generateOfflineMockParody(target, angle, intensity) {
+      return {
+        title: `${target.toUpperCase()} AND THE CRISIS OF INEVITABLE AUDITING`,
+        subtitle: `A cautionary sandbox dossier on unmonitored innocence`,
+        catchphrase: `“What we called magic back then was really just a massive lack of municipal oversight.”`,
+        synopsis: `In this simulated sandbox deconstruction of ${target}, forensic auditors uncover decades of unpaid property taxes, unlicensed structural modifications, and rampant disregard for basic thermodynamic principles. Characters roam a closed loop of emotional codependency while oblivious to the fact that the entire realm is sustained purely by residual merchandise royalties.`,
+        bullets: [
+          `Local authorities confirmed zero building permits were ever filed for any whimsical residences.`,
+          `The central protagonist displays alarming symptoms of chronophobia and selective amnesia.`,
+          `Secondary companions operate entirely on unpaid intern stipends disguised as 'friendship'.`,
+          `The original heartwarming ending was quietly drafted by a corporate liability firm.`
+        ],
+        deepTwist: `The entire premise is actually a recursive fever dream inside a discontinued VHS tape gathering dust in a garage attic.`,
+        target: target,
+        angle: angle,
+        timestamp: Date.now()
+      };
+    }
+
+    async function callGeminiRuinedAPI(target, angle, intensity, notes) {
+      // Check if user specifically opted for offline sandbox
+      if (state.offlineSandbox) {
+        await new Promise(r => setTimeout(r, 600)); // slight natural pause
+        return generateOfflineMockParody(target, angle, intensity);
+      }
+
+      const apiKey = state.apiKey.trim();
+      const model = state.model || 'gemini-3-flash-preview';
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+      const personaBase = getPersonaInstructions(state.agentPersona);
+      const customOverride = state.customPromptOverride ? `\nUser Custom Style Directive: ${state.customPromptOverride}` : '';
+      const depthInstruction = state.loreDepth === 'deep' 
+        ? "Provide an in-depth forensic analysis: a 4-paragraph rich comedic synopsis, and at least 6 detailed cynical bullet points." 
+        : "Provide a punchy 2-to-3 paragraph comedic synopsis, and 4 concise cynical bullet points.";
+
+      const systemPrompt = `${personaBase}
+${customOverride}
+Your task is to take beloved wholesome childhood franchises, cartoons, fairy tales, or children's books and deconstruct them through satire, grim realism, or forensic over-analysis.
+${depthInstruction}
+Keep it strictly PG-13 comedic parody (hilarious, dry, absurdly cynical, or existential, NOT gratuitous vulgarity).
+
+Output must strictly conform to valid JSON format matching this schema:
+{
+  "title": "CAPITALIZED SATIRICAL TITLE LIKE A CORRUPTED GOLDEN BOOK",
+  "subtitle": "Short punchy satirical one-liner",
+  "catchphrase": "A famous wholesome quote from the franchise twisted into something unhinged",
+  "synopsis": "Comedic parody story summarizing the harsh deconstruction of this franchise.",
+  "bullets": [
+    "Funny, deeply cynical observations or plot realities"
+  ],
+  "deepTwist": "One shocking and funny revelation or conspiracy theory that completely rewrites the story."
+}`;
+
+      const userPrompt = `Ruin this childhood classic:
+Target: "${target}"
+Angle/Style: "${angle}" (Options: vintage parody book, forensic noir case, unhinged conspiracy, corporate dystopia)
+Cynicism Level: ${intensity} out of 5
+Specific User Focus: ${notes ? notes : "None, pick the most iconic and funny flaw in this franchise."}
+
+Remember to return ONLY valid JSON matching the exact schema specified. No markdown ticks outside the JSON.`;
+
+      const payload = {
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: userPrompt }]
+          }
+        ],
+        systemInstruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        generationConfig: {
+          responseMimeType: "application/json",
+          temperature: state.temperature
+        }
+      };
+
+      // Add Google Search Grounding if enabled
+      if (state.enableSearch) {
+        payload.tools = [{ google_search: {} }];
+      }
+
+      // Exponential Backoff Retries
+      const maxRetries = 3;
+      let delay = 1000;
+
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            const msg = errData?.error?.message || `HTTP ${response.status}: ${response.statusText}`;
+            if (response.status === 429 && attempt < maxRetries) {
+              await new Promise(res => setTimeout(res, delay));
+              delay *= 2;
+              continue;
+            }
+            throw new Error(msg);
+          }
+
+          const result = await response.json();
+          const rawText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (!rawText) {
+            throw new Error("No response generated from Gemini.");
+          }
+
+          // Parse JSON safely
+          let parsed;
+          try {
+            const cleaned = rawText.replace(/^```json\s*/i, '').replace(/```\s*$/, '').trim();
+            parsed = JSON.parse(cleaned);
+          } catch (e) {
+            throw new Error("Could not parse AI parody output. Please try again.");
+          }
+
+          return parsed;
+
+        } catch (err) {
+          if (attempt < maxRetries && !err.message.includes("API key")) {
+            await new Promise(res => setTimeout(res, delay));
+            delay *= 2;
+          } else {
+            throw err;
+          }
+        }
+      }
+    }
+
+    function renderResult(data) {
+      state.currentResult = data;
+
+      // Update text fields
+      elements.ruinedTitle.textContent = data.title;
+      elements.ruinedSubtitle.textContent = `"${data.subtitle}"`;
+      elements.ruinedCatchphrase.textContent = `"${data.catchphrase}"`;
+      elements.ruinedSynopsis.textContent = data.synopsis;
+
+      // Update bullets
+      elements.ruinedBullets.innerHTML = '';
+      if (Array.isArray(data.bullets)) {
+        data.bullets.forEach(bullet => {
+          const li = document.createElement('li');
+          li.textContent = bullet;
+          elements.ruinedBullets.appendChild(li);
+        });
+      }
+
+      elements.deepTwistText.textContent = data.deepTwist;
+
+      // Reset Cover Art view to icon
+      elements.generatedCoverImg.classList.add('hidden');
+      elements.cardGraphicIcon.classList.remove('hidden');
+      elements.artBadge.textContent = "Stylized Glyph";
+      elements.artBadge.className = "text-[10px] bg-amber-900/10 text-amber-900 font-mono px-1.5 py-0.5 rounded border border-amber-900/20";
+
+      // Reset Interrogation Chat
+      state.interrogationHistory = [];
+      elements.interrogationRoomTitle.textContent = `Interrogation Room: Deposition of ${data.target}`;
+      elements.interrogationLog.innerHTML = `
+        <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs">
+          <strong class="text-amber-400 font-mono">DETECTIVE:</strong> "Take a seat, <em>${data.target}</em>. We have the files on ${data.title}. Care to explain yourself?"
+        </div>
+      `;
+
+      // Reset PR Apology state
+      if (elements.prContentArea) {
+        elements.prContentArea.classList.add('hidden');
+        elements.prText.textContent = '';
+        elements.generatePrBtn.disabled = false;
+        elements.generatePrBtn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Generate LLM Apology</span>`;
+      }
+
+      // Reset Cursed Merch state
+      if (elements.merchContentArea) {
+        elements.merchContentArea.classList.add('hidden');
+        elements.merchText.textContent = '';
+        elements.generateMerchBtn.disabled = false;
+        elements.generateMerchBtn.innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5"></i><span>Design Cursed Toy</span>`;
+        lucide.createIcons();
+      }
+
+      // Angle styling adjustments
+      const angle = document.querySelector('input[name="ruinAngle"]:checked').value;
+      if (angle === 'noir_investigation') {
+        elements.badgeSeriesText.textContent = "★ FORENSIC COLD CASE FILE #404 ★";
+        elements.cardGraphicIcon.textContent = "🔍";
+      } else if (angle === 'conspiracy_theory') {
+        elements.badgeSeriesText.textContent = "★ REDACTED MILITARY EXPERIMENT DOSSIER ★";
+        elements.cardGraphicIcon.textContent = "👁️";
+      } else if (angle === 'corporate_dystopia') {
+        elements.badgeSeriesText.textContent = "★ SHAREHOLDER QUARTERLY LIQUIDATION REPORT ★";
+        elements.cardGraphicIcon.textContent = "💼";
+      } else {
+        elements.badgeSeriesText.textContent = "★ A LITTLE TRAUMA CLASSIC BOOK ★";
+        elements.cardGraphicIcon.textContent = "☠️";
+      }
+
+      // Show result
+      elements.emptyState.classList.add('hidden');
+      elements.loadingState.classList.add('hidden');
+      elements.resultState.classList.remove('hidden');
+
+      // Scroll to view
+      elements.resultState.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Save to history vault
+      saveToHistory(data);
+    }
+
+    elements.generateBtn.addEventListener('click', async () => {
+      const target = elements.targetInput.value.trim();
+      if (!target) {
+        showStatus("Please enter a childhood character, book, or show to ruin!");
+        return;
+      }
+
+      clearStatus();
+      stopSpeech();
+
+      // UI Loading state
+      elements.emptyState.classList.add('hidden');
+      elements.resultState.classList.add('hidden');
+      elements.loadingState.classList.remove('hidden');
+      elements.loadingHeadline.textContent = `Deconstructing ${target}...`;
+      elements.generateBtn.disabled = true;
+      elements.generateBtn.classList.add('opacity-70', 'cursor-not-allowed');
+
+      const angle = document.querySelector('input[name="ruinAngle"]:checked').value;
+      const intensity = elements.intensitySlider.value;
+      const notes = elements.extraNotes.value.trim();
+
+      try {
+        const data = await callGeminiRuinedAPI(target, angle, intensity, notes);
+        data.target = target;
+        data.angle = angle;
+        data.timestamp = Date.now();
+        renderResult(data);
+      } catch (err) {
+        console.error(err);
+        elements.loadingState.classList.add('hidden');
+        elements.emptyState.classList.remove('hidden');
+        showStatus(`Error generating parody: ${err.message}. If you have an API key, check it under 'API Settings'.`);
+      } finally {
+        elements.generateBtn.disabled = false;
+        elements.generateBtn.classList.remove('opacity-70', 'cursor-not-allowed');
+      }
+    });
+
+    // Quick demo try button
+    elements.quickTryBtn.addEventListener('click', () => {
+      elements.targetInput.value = "Winnie the Pooh";
+      renderResult(sampleRuinedPooh);
+    });
+
+    elements.copyStoryBtn.addEventListener('click', () => {
+      if (!state.currentResult) return;
+      const r = state.currentResult;
+      const textToCopy = `=== ${r.title} ===\n${r.subtitle}\n\nQuote: "${r.catchphrase}"\n\n${r.synopsis}\n\nRuined Observations:\n${(r.bullets || []).map(b => "• " + b).join('\n')}\n\nForbidden Plot Twist: ${r.deepTwist}`;
+      
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        elements.copyStoryBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> Copied!`;
+        lucide.createIcons();
+        setTimeout(() => {
+          elements.copyStoryBtn.innerHTML = `<i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy`;
+          lucide.createIcons();
+        }, 2000);
+      });
+    });
+
+    // Feature 1: Gemini 3.1 Flash Image Illustration Generator
+    elements.generateArtBtn.addEventListener('click', async () => {
+      if (!state.currentResult) {
+        showStatus("Please generate or select a ruined story first!");
+        return;
+      }
+
+      const r = state.currentResult;
+      const style = elements.artStyleSelect.value;
+      const apiKey = state.apiKey ? state.apiKey.trim() : "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-image:generateContent?key=${apiKey}`;
+
+      elements.generateArtBtn.disabled = true;
+      elements.generateArtBtnText.textContent = "Painting...";
+      elements.artBadge.textContent = "Generating Art...";
+      elements.artBadge.className = "text-[10px] bg-rose-500/20 text-rose-700 font-mono px-1.5 py-0.5 rounded border border-rose-500/30 animate-pulse";
+
+      const promptText = `A satirical, dark, humorous vintage book cover illustration for a corrupted parody book titled "${r.title}". Scene subject: ${r.target}, ${r.subtitle}. Artistic style: ${style}. Nostalgic yet unsettling, authentic storybook illustration, masterpiece composition.`;
+
+      const payload = {
+        contents: [{
+          role: 'user',
+          parts: [{ text: promptText }]
+        }],
+        generationConfig: {
+          responseModalities: ['IMAGE'],
+          imageConfig: { aspectRatio: "1:1" }
+        }
+      };
+
+      try {
+        let delay = 1000;
+        let base64Data = null;
+        let mimeType = "image/png";
+
+        for (let attempt = 0; attempt <= 2; attempt++) {
+          try {
+            const resp = await fetch(apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (!resp.ok) {
+              const errData = await resp.json().catch(() => ({}));
+              if (resp.status === 429 && attempt < 2) {
+                await new Promise(r => setTimeout(r, delay));
+                delay *= 2;
+                continue;
+              }
+              throw new Error(errData?.error?.message || `HTTP ${resp.status}`);
+            }
+
+            const resJson = await resp.json();
+            const part = resJson?.candidates?.[0]?.content?.parts?.find(p => p.inlineData);
+            if (part?.inlineData?.data) {
+              base64Data = part.inlineData.data;
+              mimeType = part.inlineData.mimeType || "image/png";
+              break;
+            }
+          } catch (err) {
+            if (attempt === 2) throw err;
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+          }
+        }
+
+        if (base64Data) {
+          elements.generatedCoverImg.src = `data:${mimeType};base64,${base64Data}`;
+          elements.generatedCoverImg.classList.remove('hidden');
+          elements.cardGraphicIcon.classList.add('hidden');
+          elements.artBadge.textContent = "AI Illustrated";
+          elements.artBadge.className = "text-[10px] bg-emerald-900/20 text-emerald-900 font-mono px-1.5 py-0.5 rounded border border-emerald-900/40 font-bold";
+        } else {
+          throw new Error("No image data returned from Gemini.");
+        }
+      } catch (err) {
+        console.error(err);
+        showStatus(`Could not generate cover art: ${err.message}. Ensure your API key has Image Generation access.`);
+        elements.artBadge.textContent = "Art Failed";
+        elements.artBadge.className = "text-[10px] bg-rose-900/20 text-rose-900 font-mono px-1.5 py-0.5 rounded";
+      } finally {
+        elements.generateArtBtn.disabled = false;
+        elements.generateArtBtnText.textContent = "Paint AI Cover";
+      }
+    });
+
+    // Feature 2: High-Fidelity Gemini TTS Studio Narration
+    function stopSpeech() {
+      if (elements.ttsAudioPlayer) {
+        elements.ttsAudioPlayer.pause();
+        elements.ttsAudioPlayer.currentTime = 0;
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      state.isSpeaking = false;
+      elements.speakLabel.textContent = "Studio Voice";
+      elements.speakStoryBtn.classList.remove('bg-rose-700', 'text-white');
+    }
+
+    elements.speakStoryBtn.addEventListener('click', async () => {
+      if (state.isSpeaking) {
+        stopSpeech();
+        return;
+      }
+
+      if (!state.currentResult) {
+        showStatus("Generate a memory to narrate first!");
+        return;
+      }
+
+      const r = state.currentResult;
+      const selectedVoice = elements.geminiVoiceSelect.value || "Algenib";
+      const narrationScript = `Say in a dramatic, dark comedic retro documentary voice: ${r.title}. ${r.subtitle}. ${r.synopsis}. Here is the forbidden plot twist: ${r.deepTwist}`;
+
+      elements.speakLabel.textContent = "Synthesizing...";
+      elements.speakStoryBtn.disabled = true;
+
+      const apiKey = state.apiKey ? state.apiKey.trim() : "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+
+      const ttsPayload = {
+        contents: [{
+          parts: [{ text: narrationScript }]
+        }],
+        generationConfig: {
+          responseModalities: ["AUDIO"],
+          speechConfig: {
+            voiceConfig: {
+              prebuiltVoiceConfig: { voiceName: selectedVoice }
+            }
+          }
+        },
+        model: "gemini-2.5-flash-preview-tts"
+      };
+
+      try {
+        let delay = 1000;
+        let audioBlobUrl = null;
+
+        for (let attempt = 0; attempt <= 2; attempt++) {
+          try {
+            const resp = await fetch(apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(ttsPayload)
+            });
+
+            if (!resp.ok) {
+              const err = await resp.json().catch(() => ({}));
+              if (resp.status === 429 && attempt < 2) {
+                await new Promise(res => setTimeout(res, delay));
+                delay *= 2;
+                continue;
+              }
+              throw new Error(err?.error?.message || `HTTP ${resp.status}`);
+            }
+
+            const result = await resp.json();
+            const part = result?.candidates?.[0]?.content?.parts?.[0];
+            const audioData = part?.inlineData?.data;
+            const mimeType = part?.inlineData?.mimeType;
+
+            if (audioData && mimeType && mimeType.startsWith("audio/")) {
+              const sampleRateMatch = mimeType.match(/rate=(\d+)/);
+              const sampleRate = sampleRateMatch ? parseInt(sampleRateMatch[1], 10) : 24000;
+              const pcmData = base64ToArrayBuffer(audioData);
+              const pcm16 = new Int16Array(pcmData);
+              const wavBlob = pcmToWav(pcm16, sampleRate);
+              audioBlobUrl = URL.createObjectURL(wavBlob);
+              break;
+            }
+          } catch (e) {
+            if (attempt === 2) throw e;
+            await new Promise(res => setTimeout(res, delay));
+            delay *= 2;
+          }
+        }
+
+        if (audioBlobUrl) {
+          elements.ttsAudioPlayer.src = audioBlobUrl;
+          elements.ttsAudioPlayer.play();
+          state.isSpeaking = true;
+          elements.speakLabel.textContent = "Stop Audio";
+          elements.speakStoryBtn.classList.add('bg-rose-700', 'text-white');
+          elements.ttsAudioPlayer.onended = () => stopSpeech();
+          elements.ttsAudioPlayer.onerror = () => stopSpeech();
+        } else {
+          throw new Error("Unable to synthesize audio stream.");
+        }
+      } catch (err) {
+        console.warn("Falling back to local speech synthesis:", err);
+        // Seamless fallback to browser speech if offline or quota limit
+        const fallbackText = `${r.title}. ${r.subtitle}. ${r.synopsis}. ${r.deepTwist}`;
+        state.speechUtterance = new SpeechSynthesisUtterance(fallbackText);
+        state.speechUtterance.rate = 0.95;
+        state.speechUtterance.onend = () => stopSpeech();
+        state.speechUtterance.onerror = () => stopSpeech();
+        window.speechSynthesis.speak(state.speechUtterance);
+        state.isSpeaking = true;
+        elements.speakLabel.textContent = "Stop (Local)";
+        elements.speakStoryBtn.classList.add('bg-rose-700', 'text-white');
+      } finally {
+        elements.speakStoryBtn.disabled = false;
+      }
+    });
+
+    // Feature 3: Interactive Suspect Cross-Examination (Multi-turn LLM)
+    elements.interrogationForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const question = elements.interrogationInput.value.trim();
+      if (!question) return;
+
+      const target = state.currentResult?.target || elements.targetInput.value || "the suspect";
+      const ruinedTitle = state.currentResult?.title || "their corrupted backstory";
+      const synopsis = state.currentResult?.synopsis || "";
+
+      // Append user's interrogation line to UI
+      const userBubble = document.createElement('div');
+      userBubble.className = "p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-xs";
+      userBubble.innerHTML = `<strong class="text-rose-400 font-mono">YOU:</strong> ${question}`;
+      elements.interrogationLog.appendChild(userBubble);
+      elements.interrogationInput.value = "";
+      elements.interrogationLog.scrollTop = elements.interrogationLog.scrollHeight;
+
+      // Loading indicator bubble
+      const loadingBubble = document.createElement('div');
+      loadingBubble.className = "p-2.5 rounded-xl bg-slate-950 border border-amber-900/40 text-amber-300 text-xs italic flex items-center gap-2";
+      loadingBubble.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span> ${target} is sweating under the lamp and preparing their testimony...`;
+      elements.interrogationLog.appendChild(loadingBubble);
+      elements.interrogationLog.scrollTop = elements.interrogationLog.scrollHeight;
+
+      elements.interrogateSubmitBtn.disabled = true;
+
+      // Build chat history for Gemini multi-turn
+      state.interrogationHistory.push({
+        role: "user",
+        parts: [{ text: question }]
+      });
+
+      const characterSystemPrompt = `You are roleplaying as the childhood character "${target}" in an interrogation room.
+A deconstruction has revealed the dark satirical truth about you: "${ruinedTitle}".
+Background context: ${synopsis}
+Stay in character as a hilariously defensive, slightly traumatized, guilty, or unhinged version of this children's character who is desperately trying to justify their actions, plead innocence, blame their creator, or accidentally reveal worse secrets.
+Keep responses concise, funny, and punchy (2-4 sentences max).`;
+
+      const apiKey = state.apiKey ? state.apiKey.trim() : "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const chatPayload = {
+        contents: state.interrogationHistory,
+        systemInstruction: {
+          parts: [{ text: characterSystemPrompt }]
+        },
+        generationConfig: {
+          temperature: 0.85,
+          maxOutputTokens: 250
+        }
+      };
+
+      try {
+        let characterReply = "";
+        let delay = 1000;
+
+        for (let attempt = 0; attempt <= 2; attempt++) {
+          try {
+            const resp = await fetch(apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(chatPayload)
+            });
+
+            if (!resp.ok) {
+              if (resp.status === 429 && attempt < 2) {
+                await new Promise(r => setTimeout(r, delay));
+                delay *= 2;
+                continue;
+              }
+              throw new Error(`HTTP ${resp.status}`);
+            }
+
+            const data = await resp.json();
+            characterReply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (characterReply) break;
+          } catch (err) {
+            if (attempt === 2) throw err;
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+          }
+        }
+
+        loadingBubble.remove();
+
+        if (characterReply) {
+          state.interrogationHistory.push({
+            role: "model",
+            parts: [{ text: characterReply }]
+          });
+
+          const charBubble = document.createElement('div');
+          charBubble.className = "p-2.5 rounded-xl bg-amber-950/30 border border-amber-800/40 text-amber-200 text-xs";
+          charBubble.innerHTML = `<strong class="text-amber-400 font-mono">${target.toUpperCase()}:</strong> ${characterReply}`;
+          elements.interrogationLog.appendChild(charBubble);
+        } else {
+          throw new Error("No response generated");
+        }
+      } catch (err) {
+        loadingBubble.remove();
+        const errBubble = document.createElement('div');
+        errBubble.className = "p-2.5 rounded-xl bg-rose-950/30 border border-rose-800 text-rose-300 text-xs";
+        errBubble.innerHTML = `<strong class="text-rose-400 font-mono">${target.toUpperCase()}:</strong> <em>*pleads the Fifth Amendment and refuses to speak without their union attorney*</em>`;
+        elements.interrogationLog.appendChild(errBubble);
+      } finally {
+        elements.interrogateSubmitBtn.disabled = false;
+        elements.interrogationLog.scrollTop = elements.interrogationLog.scrollHeight;
+        elements.interrogationInput.focus();
+      }
+    });
+
+    // Feature 4: Generate Corporate PR Apology (Gemini Text Generation)
+    elements.generatePrBtn.addEventListener('click', async () => {
+      if (!state.currentResult) return;
+      const target = state.currentResult.target;
+      const synopsis = state.currentResult.synopsis;
+
+      elements.prContentArea.classList.remove('hidden');
+      elements.prText.classList.add('hidden');
+      elements.prLoading.classList.remove('hidden');
+      elements.generatePrBtn.disabled = true;
+
+      const apiKey = state.apiKey ? state.apiKey.trim() : "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const prompt = `Write a hilarious 3-paragraph corporate PR apology letter from the creators/studio of "${target}".
+      They are addressing the recent disturbing leaks and allegations described here: "${synopsis}".
+      Make it sound like a desperate, legally-vetted attempt to cover up the horrible truth, full of buzzwords, fake accountability, and accidental admissions of guilt. Format it as an official press release.`;
+
+      const payload = {
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.9, maxOutputTokens: 400 }
+      };
+
+      try {
+        let delay = 1000;
+        let responseText = "";
+
+        // Exponential backoff logic
+        for (let attempt = 0; attempt <= 2; attempt++) {
+          try {
+            const resp = await fetch(apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (!resp.ok) {
+              if (resp.status === 429 && attempt < 2) {
+                await new Promise(r => setTimeout(r, delay));
+                delay *= 2;
+                continue;
+              }
+              throw new Error(`HTTP ${resp.status}`);
+            }
+
+            const data = await resp.json();
+            responseText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (responseText) break;
+          } catch (err) {
+            if (attempt === 2) throw err;
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+          }
+        }
+
+        if (responseText) {
+          elements.prText.textContent = responseText;
+          elements.prText.classList.remove('hidden');
+        } else {
+          throw new Error("Empty response from AI.");
+        }
+      } catch (err) {
+        elements.prText.textContent = "Error generating apology: " + err.message;
+        elements.prText.classList.remove('hidden');
+      } finally {
+        elements.prLoading.classList.add('hidden');
+        elements.generatePrBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Apology Leaked</span>`;
+        lucide.createIcons();
+      }
+    });
+
+    // Feature 5: Generate Cursed Merchandise Pitch (Gemini Text Generation)
+    elements.generateMerchBtn.addEventListener('click', async () => {
+      if (!state.currentResult) return;
+      const target = state.currentResult.target;
+      const synopsis = state.currentResult.synopsis;
+
+      elements.merchContentArea.classList.remove('hidden');
+      elements.merchText.classList.add('hidden');
+      elements.merchLoading.classList.remove('hidden');
+      elements.generateMerchBtn.disabled = true;
+
+      const apiKey = state.apiKey ? state.apiKey.trim() : "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const prompt = `You are an unethical, fast-talking corporate toy executive pitching a tie-in product for a newly ruined childhood franchise. 
+      Target franchise: "${target}".
+      Dark lore context: "${synopsis}".
+      
+      Pitch a highly inappropriate, legally questionable, or psychologically damaging children's toy. Make it sound enthusiastic and completely oblivious to how dangerous, existential, or disturbing the toy is. Keep it to one punchy paragraph and include a bolded funny, cursed name for the toy at the beginning.`;
+
+      const payload = {
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 1.0, maxOutputTokens: 250 }
+      };
+
+      try {
+        let delay = 1000;
+        let responseText = "";
+
+        for (let attempt = 0; attempt <= 2; attempt++) {
+          try {
+            const resp = await fetch(apiUrl, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+
+            if (!resp.ok) {
+              if (resp.status === 429 && attempt < 2) {
+                await new Promise(r => setTimeout(r, delay));
+                delay *= 2;
+                continue;
+              }
+              throw new Error(`HTTP ${resp.status}`);
+            }
+
+            const data = await resp.json();
+            responseText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (responseText) break;
+          } catch (err) {
+            if (attempt === 2) throw err;
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+          }
+        }
+
+        if (responseText) {
+          // Convert markdown bold to HTML just for the toy name if present
+          const formattedText = responseText.replace(/\*\*(.*?)\*\*/g, '<strong class="text-emerald-400">$1</strong>');
+          elements.merchText.innerHTML = formattedText;
+          elements.merchText.classList.remove('hidden');
+        } else {
+          throw new Error("Empty response from AI.");
+        }
+      } catch (err) {
+        elements.merchText.textContent = "Error generating toy pitch: " + err.message;
+        elements.merchText.classList.remove('hidden');
+      } finally {
+        elements.merchLoading.classList.add('hidden');
+        elements.generateMerchBtn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i><span>Cursed Toy Pitched</span>`;
+        lucide.createIcons();
+      }
+    });
+
+    // Export Canvas Card as PNG
+    elements.exportImageBtn.addEventListener('click', () => {
+      if (!state.currentResult) return;
+      const r = state.currentResult;
+      const canvas = elements.exportCanvas;
+      const ctx = canvas.getContext('2d');
+
+      canvas.width = 800;
+      canvas.height = 1000;
+
+      // Background gradient
+      const grad = ctx.createLinearGradient(0, 0, 800, 1000);
+      grad.addColorStop(0, '#fef3c7');
+      grad.addColorStop(1, '#ffedd5');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 800, 1000);
+
+      // Spine & Border
+      ctx.lineWidth = 14;
+      ctx.strokeStyle = '#f59e0b';
+      ctx.strokeRect(7, 7, 786, 986);
+
+      // Header Tag
+      ctx.fillStyle = '#78350f';
+      ctx.font = 'bold 20px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(elements.badgeSeriesText.textContent || 'YOUR CHILDHOOD RUINED', 400, 60);
+
+      // Title wrapping
+      ctx.fillStyle = '#881337';
+      ctx.font = 'bold 32px serif';
+      wrapText(ctx, r.title, 400, 120, 700, 40);
+
+      // Subtitle
+      ctx.fillStyle = '#be123c';
+      ctx.font = 'italic 20px sans-serif';
+      wrapText(ctx, `"${r.subtitle}"`, 400, 220, 680, 28);
+
+      // Body Box
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.fillRect(50, 260, 700, 480);
+      ctx.strokeStyle = '#d97706';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(50, 260, 700, 480);
+
+      // Body text
+      ctx.fillStyle = '#1e293b';
+      ctx.font = '16px sans-serif';
+      ctx.textAlign = 'left';
+      wrapText(ctx, r.synopsis, 80, 310, 640, 24);
+
+      // Bullets
+      let bY = 520;
+      ctx.fillStyle = '#991b1b';
+      ctx.font = 'bold 15px monospace';
+      ctx.fillText('CRUEL OBSERVATIONS:', 80, bY);
+      bY += 30;
+
+      ctx.fillStyle = '#334155';
+      ctx.font = '14px sans-serif';
+      if (Array.isArray(r.bullets)) {
+        r.bullets.slice(0, 3).forEach(b => {
+          wrapText(ctx, `• ${b}`, 80, bY, 640, 22);
+          bY += 45;
+        });
+      }
+
+      // Plot twist bottom ribbon
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(50, 770, 700, 160);
+
+      ctx.fillStyle = '#f43f5e';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.fillText('FORBIDDEN PLOT TWIST:', 70, 810);
+
+      ctx.fillStyle = '#e2e8f0';
+      ctx.font = '14px sans-serif';
+      wrapText(ctx, r.deepTwist, 70, 840, 660, 22);
+
+      // Footer
+      ctx.fillStyle = '#78350f';
+      ctx.font = '12px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('GENERATED WITH YOUR CHILDHOOD RUINED AI STUDIO', 400, 965);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = `${r.target.toLowerCase().replace(/\s+/g, '-')}-ruined.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+
+    function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+      if (!text) return;
+      const words = text.split(' ');
+      let line = '';
+      for (let n = 0; n < words.length; n++) {
+        const testLine = line + words[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        if (metrics.width > maxWidth && n > 0) {
+          ctx.fillText(line, x, y);
+          line = words[n] + ' ';
+          y += lineHeight;
+        } else {
+          line = testLine;
+        }
+      }
+      ctx.fillText(line, x, y);
+    }
+
+    function saveToHistory(item) {
+      state.history.unshift(item);
+      if (state.history.length > 25) state.history.pop();
+      localStorage.setItem('ycr_history', JSON.stringify(state.history));
+      renderHistoryList();
+    }
+
+    function renderHistoryList() {
+      elements.historyCountBadge.textContent = state.history.length;
+      elements.vaultItemCount.textContent = `${state.history.length} saved parodies`;
+
+      if (state.history.length === 0) {
+        elements.historyList.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">No saved memories in your vault yet.</div>`;
+        return;
+      }
+
+      elements.historyList.innerHTML = '';
+      state.history.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "p-3 bg-slate-900 hover:bg-slate-800/90 border border-slate-800 rounded-xl cursor-pointer transition flex items-center justify-between";
+        div.innerHTML = `
+          <div class="pr-3 flex-1 overflow-hidden">
+            <div class="font-bold text-slate-200 text-xs truncate">${item.title}</div>
+            <div class="text-[11px] text-slate-400 truncate">${item.target} • ${new Date(item.timestamp).toLocaleDateString()}</div>
+          </div>
+          <button class="load-history-btn px-2 py-1 text-[11px] rounded bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-800 shrink-0">
+            Open
+          </button>
+        `;
+        div.querySelector('.load-history-btn').addEventListener('click', (e) => {
+          e.stopPropagation();
+          renderResult(item);
+          elements.historyModal.classList.add('hidden');
+        });
+        div.addEventListener('click', () => {
+          renderResult(item);
+          elements.historyModal.classList.add('hidden');
+        });
+        elements.historyList.appendChild(div);
+      });
+    }
+
+    elements.clearHistoryBtn.addEventListener('click', () => {
+      state.history = [];
+      localStorage.removeItem('ycr_history');
+      renderHistoryList();
+    });
+
+    // Open & Close Dashboard
+    elements.openApiModalBtn.addEventListener('click', () => {
+      syncSettingsToForm();
+      elements.apiModal.classList.remove('hidden');
+    });
+
+    elements.quickDashboardBtn?.addEventListener('click', () => {
+      syncSettingsToForm();
+      elements.apiModal.classList.remove('hidden');
+    });
+
+    elements.closeApiModalBtn.addEventListener('click', () => {
+      elements.apiModal.classList.add('hidden');
+    });
+
+    // Save All Dashboard Settings
+    elements.saveKeyBtn.addEventListener('click', () => {
+      state.apiKey = elements.apiKeyInput.value.trim();
+      state.model = document.querySelector('input[name="agentModel"]:checked')?.value || 'gemini-3-flash-preview';
+      state.agentPersona = document.querySelector('input[name="agentPersona"]:checked')?.value || 'satirist';
+      state.loreDepth = document.querySelector('input[name="loreDepth"]:checked')?.value || 'standard';
+      state.customPromptOverride = elements.customPromptOverride.value.trim();
+      state.temperature = parseFloat(elements.tempSlider.value);
+      state.enableSearch = elements.enableSearchToggle.checked;
+      state.offlineSandbox = elements.offlineSandboxToggle.checked;
+
+      // Persist to storage
+      localStorage.setItem('ycr_gemini_api_key', state.apiKey);
+      localStorage.setItem('ycr_agent_model', state.model);
+      localStorage.setItem('ycr_agent_persona', state.agentPersona);
+      localStorage.setItem('ycr_agent_depth', state.loreDepth);
+      localStorage.setItem('ycr_agent_custom_prompt', state.customPromptOverride);
+      localStorage.setItem('ycr_agent_temperature', state.temperature.toString());
+      localStorage.setItem('ycr_agent_search', state.enableSearch.toString());
+      localStorage.setItem('ycr_agent_offline', state.offlineSandbox.toString());
+
+      updateDashboardBadges();
+      elements.apiModal.classList.add('hidden');
+      showStatus("Agent and engine settings successfully applied!", "success");
+      setTimeout(clearStatus, 3000);
+    });
+
+    // Clear Key
+    elements.clearKeyBtn.addEventListener('click', () => {
+      state.apiKey = '';
+      elements.apiKeyInput.value = '';
+      localStorage.removeItem('ycr_gemini_api_key');
+      updateDashboardBadges();
+      showStatus("Custom API key removed. Using default environment configuration.", "success");
+      setTimeout(clearStatus, 3000);
+    });
+
+    // Reset Defaults
+    elements.resetDefaultsBtn.addEventListener('click', () => {
+      state.model = 'gemini-3-flash-preview';
+      state.agentPersona = 'satirist';
+      state.loreDepth = 'standard';
+      state.customPromptOverride = '';
+      state.temperature = 0.85;
+      state.enableSearch = false;
+      state.offlineSandbox = false;
+      syncSettingsToForm();
+      showStatus("Reset agent parameters to factory defaults.", "success");
+      setTimeout(clearStatus, 2500);
+    });
+
+    // Test API Connectivity
+    elements.testApiBtn.addEventListener('click', async () => {
+      elements.testApiBtn.disabled = true;
+      elements.testApiBtnText.textContent = "Pinging...";
+      elements.testApiResult.textContent = "";
+
+      const testKey = elements.apiKeyInput.value.trim() || state.apiKey;
+      const model = document.querySelector('input[name="agentModel"]:checked')?.value || 'gemini-3-flash-preview';
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${testKey}`;
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: "Respond with the single word: OK" }] }]
+          })
+        });
+
+        if (res.ok) {
+          elements.testApiResult.textContent = "✓ Connected Successfully!";
+          elements.testApiResult.className = "text-[11px] font-mono text-emerald-400";
+        } else {
+          const err = await res.json().catch(() => ({}));
+          elements.testApiResult.textContent = `✗ Failed (${res.status}): ${err?.error?.message?.slice(0, 30) || 'Error'}`;
+          elements.testApiResult.className = "text-[11px] font-mono text-rose-400";
+        }
+      } catch (e) {
+        elements.testApiResult.textContent = `✗ Network Error`;
+        elements.testApiResult.className = "text-[11px] font-mono text-rose-400";
+      } finally {
+        elements.testApiBtn.disabled = false;
+        elements.testApiBtnText.textContent = "Test Connectivity";
+      }
+    });
+
+    // Vault modal controls
+    elements.toggleHistoryBtn.addEventListener('click', () => {
+      renderHistoryList();
+      elements.historyModal.classList.remove('hidden');
+    });
+
+    elements.closeHistoryModalBtn.addEventListener('click', () => {
+      elements.historyModal.classList.add('hidden');
+    });
+
+    // Close on backdrop click
+    window.addEventListener('click', (e) => {
+      if (e.target === elements.apiModal) elements.apiModal.classList.add('hidden');
+      if (e.target === elements.historyModal) elements.historyModal.classList.add('hidden');
+    });
+
+    // Initialize list
+    renderHistoryList();
+  </script>
+</body>
+</html>
